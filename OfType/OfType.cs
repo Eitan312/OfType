@@ -7,47 +7,33 @@ namespace OfType
     {
         public IEnumerable<T> GetOfType<T>(IEnumerable enumerable)
         {
-            List<T> filteredItems = new List<T>();
-            IEnumerator items = enumerable.GetEnumerator();
-            while(items.MoveNext())
-            {
-                if(items.Current is T)
-                {
-                    filteredItems.Add((T)items.Current);
-                }
-            }
-
-            return (IEnumerable<T>)filteredItems;
+            return FilterItems<T>(enumerable);
         }
 
         public IEnumerable<TOutput> GetOfType<TSource, TOutput>(IEnumerable<TSource> enumerable)
         {
-            List<TOutput> filteredItems = new List<TOutput>();
-            IEnumerator items = enumerable.GetEnumerator();
-            while (items.MoveNext())
-            {
-                if (items.Current is TOutput)
-                {
-                    filteredItems.Add((TOutput)items.Current);
-                }
-            }
-
-            return (IEnumerable<TOutput>)filteredItems;
+            return FilterItems<TOutput>(enumerable);
         }
 
         public IEnumerable<TBase> OfBase<TBase, TDerived>(IEnumerable<TDerived> derivedItems) where TDerived : TBase
         {
-            List<TBase> filteredItems = new List<TBase>();
-            IEnumerator items = derivedItems.GetEnumerator();
-            while (items.MoveNext())
+            return derivedItems.Cast<TBase>();
+        }
+
+        public IEnumerable<TOutPut> FilterItems<TOutPut>(IEnumerable items)
+        {
+            IEnumerator enumerator = items.GetEnumerator();
+            List<TOutPut> filteredItems = new List<TOutPut>();
+
+            while(enumerator.MoveNext())
             {
-                if (items.Current is TBase)
+                if(enumerator.Current is TOutPut)
                 {
-                    filteredItems.Add((TBase)items.Current);
+                    filteredItems.Add((TOutPut)enumerator.Current);
                 }
             }
 
-            return (IEnumerable<TBase>)filteredItems;
+            return filteredItems;
         }
     }
 }
